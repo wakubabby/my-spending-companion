@@ -71,60 +71,75 @@ export const AddExpenseModal = ({ open, onClose, onAdd }: AddExpenseModalProps) 
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
+      {/* ปรับปรุง: 
+        - sm:max-w-[480px] เพิ่มความกว้างเพื่อให้ปุ่ม "ประเภท" มีพื้นที่พอ
+        - w-[95vw] สำหรับมือถือ
+        - เอา max-h และ overflow-y-auto ออกเพื่อให้ขยายตามเนื้อหาจริง
+      */}
+      <DialogContent className="sm:max-w-[480px] w-[95vw] p-6 outline-none">
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold">เพิ่มรายจ่าย</DialogTitle>
+          <DialogTitle className="text-xl font-bold">เพิ่มรายจ่าย</DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-5 py-4">
+        <div className="space-y-6 py-2">
+          {/* ชื่อรายการ */}
           <div className="space-y-2">
-            <Label className="text-muted-foreground text-sm">ชื่อรายการ</Label>
+            <Label className="text-muted-foreground text-sm font-medium">ชื่อรายการ</Label>
             <Input
               placeholder="เช่น ค่าอาหารกลางวัน"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="h-12"
+              className="h-12 text-base"
             />
           </div>
 
+          {/* จำนวนเงิน */}
           <div className="space-y-2">
-            <Label className="text-muted-foreground text-sm">จำนวนเงิน</Label>
+            <Label className="text-muted-foreground text-sm font-medium">จำนวนเงิน</Label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-medium">฿</span>
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground font-semibold">฿</span>
               <Input
                 type="number"
                 placeholder="0.00"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                className="h-12 pl-8"
+                className="h-12 pl-10 text-lg font-medium"
               />
             </div>
           </div>
 
+          {/* ประเภท (ปรับปรุงปุ่มให้แสดงผลแถวเดียวได้สวยขึ้น) */}
           <div className="space-y-2">
-            <Label className="text-muted-foreground text-sm">ประเภท</Label>
+            <Label className="text-muted-foreground text-sm font-medium">ประเภท</Label>
             <div className="flex gap-2">
               {CATEGORY_TYPES.map((type) => (
-                <Button
+                <button
                   key={type.id}
-                  variant={categoryType === type.id ? 'default' : 'outline'}
-                  size="sm"
+                  type="button"
                   onClick={() => {
                     setCategoryType(type.id);
                     setCategoryId('');
                     setSubCategoryId('');
                   }}
-                  className="flex-1 h-10"
+                  className={cn(
+                    "flex-1 h-14 flex flex-col items-center justify-center rounded-xl border transition-all px-1",
+                    categoryType === type.id 
+                      ? "bg-primary text-primary-foreground border-primary shadow-md scale-[1.02]" 
+                      : "bg-background border-input hover:bg-accent text-muted-foreground"
+                  )}
                 >
-                  <span className="mr-1">{type.emoji}</span>
-                  <span className="text-xs">{type.name}</span>
-                </Button>
+                  <span className="text-lg leading-tight">{type.emoji}</span>
+                  <span className="text-[10px] sm:text-[11px] font-bold whitespace-nowrap uppercase tracking-tighter">
+                    {type.name}
+                  </span>
+                </button>
               ))}
             </div>
           </div>
 
+          {/* หมวดหมู่ */}
           <div className="space-y-2">
-            <Label className="text-muted-foreground text-sm">หมวดหมู่</Label>
+            <Label className="text-muted-foreground text-sm font-medium">หมวดหมู่</Label>
             <Select value={categoryId} onValueChange={(value) => {
               setCategoryId(value);
               setSubCategoryId('');
@@ -132,33 +147,34 @@ export const AddExpenseModal = ({ open, onClose, onAdd }: AddExpenseModalProps) 
               <SelectTrigger className="h-12">
                 <SelectValue placeholder="เลือกหมวดหมู่" />
               </SelectTrigger>
-              <SelectContent className="bg-popover border border-border z-50">
+              <SelectContent className="z-[100]">
                 {filteredCategories.map((cat) => (
                   <SelectItem key={cat.id} value={cat.id}>
-                    <span className="flex items-center gap-2">
-                      <span>{cat.icon}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg">{cat.icon}</span>
                       <span>{cat.name}</span>
-                    </span>
+                    </div>
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
 
+          {/* หมวดย่อย (ถ้ามี) */}
           {selectedCategory && selectedCategory.subCategories.length > 0 && (
             <div className="space-y-2">
-              <Label className="text-muted-foreground text-sm">หมวดย่อย</Label>
+              <Label className="text-muted-foreground text-sm font-medium">หมวดย่อย</Label>
               <Select value={subCategoryId} onValueChange={setSubCategoryId}>
                 <SelectTrigger className="h-12">
                   <SelectValue placeholder="เลือกหมวดย่อย (ไม่บังคับ)" />
                 </SelectTrigger>
-                <SelectContent className="bg-popover border border-border z-50">
+                <SelectContent className="z-[100]">
                   {selectedCategory.subCategories.map((sub) => (
                     <SelectItem key={sub.id} value={sub.id}>
-                      <span className="flex items-center gap-2">
-                        <span>{sub.icon}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-lg">{sub.icon}</span>
                         <span>{sub.name}</span>
-                      </span>
+                      </div>
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -166,25 +182,31 @@ export const AddExpenseModal = ({ open, onClose, onAdd }: AddExpenseModalProps) 
             </div>
           )}
 
+          {/* เลือกสี (ปรับขนาดปุ่มสีให้กะทัดรัดขึ้น) */}
           <div className="space-y-2">
-            <Label className="text-muted-foreground text-sm">สี</Label>
+            <Label className="text-muted-foreground text-sm font-medium">สีธีมรายการ</Label>
             <div className="grid grid-cols-4 gap-3">
               {GRADIENT_COLORS.map((c) => (
                 <button
                   key={c.id}
+                  type="button"
                   onClick={() => setColor(c.id)}
                   className={cn(
-                    'h-12 rounded-xl transition-all',
+                    'h-10 rounded-xl transition-all border-2',
                     getGradientClass(c.id),
-                    color === c.id ? 'ring-2 ring-primary ring-offset-2' : ''
+                    color === c.id ? 'border-primary ring-2 ring-primary/20 scale-105' : 'border-transparent opacity-80 hover:opacity-100'
                   )}
                 />
               ))}
             </div>
           </div>
 
-          <Button onClick={handleSubmit} className="w-full h-12 text-base font-medium">
-            บันทึก
+          {/* ปุ่มบันทึก */}
+          <Button 
+            onClick={handleSubmit} 
+            className="w-full h-14 text-base font-bold mt-2 shadow-lg active:scale-[0.98] transition-transform"
+          >
+            บันทึกรายการ
           </Button>
         </div>
       </DialogContent>
