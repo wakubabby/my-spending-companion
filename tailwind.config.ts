@@ -57,6 +57,10 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        needs: "hsl(var(--needs))",
+        lifestyle: "hsl(var(--lifestyle))",
+        savings: "hsl(var(--savings))",
+        debt: "hsl(var(--debt))",
       },
       borderRadius: {
         lg: "var(--radius)",
