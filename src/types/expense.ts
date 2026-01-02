@@ -33,6 +33,7 @@ export interface Expense {
   date: Date;
   color: GradientColor;
   note?: string;
+  customIcon?: string;
 }
 
 export interface Debt {
@@ -42,7 +43,44 @@ export interface Debt {
   totalAmount: number;
   paidAmount: number;
   color: GradientColor;
+  customIcon?: string;
 }
+
+// Six Jars types
+export interface Jar {
+  id: string;
+  name: string;
+  description: string;
+  percentage: number;
+  emoji: string;
+  color: GradientColor;
+  currentAmount: number;
+  targetAmount?: number;
+}
+
+export interface Income {
+  id: string;
+  name: string;
+  amount: number;
+  type: 'regular' | 'irregular';
+  date: Date;
+}
+
+export interface BankAccount {
+  id: string;
+  name: string;
+  jarIds: string[];
+  balance: number;
+}
+
+export const DEFAULT_JARS: Omit<Jar, 'id' | 'currentAmount'>[] = [
+  { name: 'จำเป็น (Necessities)', description: 'ค่าใช้จ่ายพื้นฐาน เช่น อาหาร เดินทาง ค่าโทรศัพท์', percentage: 55, emoji: '🏠', color: 'pink' },
+  { name: 'อิสรภาพการเงิน (FIRE)', description: 'ไว้ลงทุน หรือสร้างรายได้ในอนาคต', percentage: 10, emoji: '💰', color: 'yellow' },
+  { name: 'การศึกษา (Education)', description: 'คอร์สเรียน หนังสือ หรือสิ่งที่ช่วยพัฒนาตัวเอง', percentage: 10, emoji: '📚', color: 'blue' },
+  { name: 'ความบันเทิง (Play)', description: 'ใช้แบบสบายใจ เช่น กินดี ๆ ซื้อของ ดูหนัง เที่ยว', percentage: 10, emoji: '🎉', color: 'purple' },
+  { name: 'เงินสำรองฉุกเฉิน (Savings)', description: 'เก็บไว้ใช้ในเหตุการณ์สำคัญ หรือเป้าหมายระยะยาว', percentage: 10, emoji: '🏦', color: 'green' },
+  { name: 'การบริจาค (Give)', description: 'เพื่อแบ่งปันและช่วยเหลือผู้อื่น', percentage: 5, emoji: '❤️', color: 'mint' },
+];
 
 export const CATEGORIES: Category[] = [
   {
@@ -124,12 +162,39 @@ export const CATEGORIES: Category[] = [
   },
   {
     id: 'entertainment',
-    name: 'บันเทิง/ชอปปิง',
+    name: 'บันเทิง',
+    type: 'lifestyle',
+    icon: '🎮',
+    subCategories: [
+      { id: 'games', name: 'เกม', icon: '🕹️' },
+      { id: 'movies', name: 'ดูหนัง', icon: '🎬' },
+      { id: 'streaming', name: 'Subscriptions', icon: '📺' },
+    ],
+  },
+  {
+    id: 'subscriptions',
+    name: 'Subscriptions',
+    type: 'lifestyle',
+    icon: '📺',
+    subCategories: [
+      { id: 'netflix', name: 'Netflix', icon: '🎬' },
+      { id: 'youtube', name: 'Youtube Premium', icon: '▶️' },
+      { id: 'disney', name: 'Disney+', icon: '🏰' },
+      { id: 'bilibili', name: 'Bilibili', icon: '📺' },
+      { id: 'chatgpt', name: 'ChatGPT', icon: '🤖' },
+      { id: 'gemini', name: 'Gemini', icon: '✨' },
+      { id: 'hbomax', name: 'HBO Max', icon: '🎥' },
+      { id: 'icloud', name: 'iCloud', icon: '☁️' },
+      { id: 'squareweb', name: 'Squareweb', icon: '🌐' },
+    ],
+  },
+  {
+    id: 'shopping',
+    name: 'ชอปปิง',
     type: 'lifestyle',
     icon: '🛍️',
     subCategories: [
       { id: 'clothes', name: 'ชอปปิงเสื้อผ้า', icon: '👗' },
-      { id: 'movies', name: 'ดูหนัง', icon: '🎬' },
       { id: 'travel', name: 'ท่องเที่ยว', icon: '✈️' },
       { id: 'misc', name: 'เบ็ดเตล็ด', icon: '📦' },
     ],
@@ -142,16 +207,6 @@ export const CATEGORIES: Category[] = [
     subCategories: [
       { id: 'books', name: 'ค่าหนังสือ', icon: '📖' },
       { id: 'courses', name: 'คอร์สเรียน', icon: '🎓' },
-    ],
-  },
-  {
-    id: 'subscription',
-    name: 'Subscription',
-    type: 'lifestyle',
-    icon: '📺',
-    subCategories: [
-      { id: 'monthly-sub', name: 'รายเดือน', icon: '📅' },
-      { id: 'yearly-sub', name: 'รายปี', icon: '📆' },
     ],
   },
   {
