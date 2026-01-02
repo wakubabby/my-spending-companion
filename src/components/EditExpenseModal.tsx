@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -15,20 +15,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { CATEGORIES, GRADIENT_COLORS, GradientColor, CategoryType, getGradientClass } from '@/types/expense';
+import { CATEGORIES, GRADIENT_COLORS, GradientColor, CategoryType, getGradientClass, Expense } from '@/types/expense';
 import { cn } from '@/lib/utils';
+import { Upload } from 'lucide-react';
 
-interface AddExpenseModalProps {
+interface EditExpenseModalProps {
   open: boolean;
   onClose: () => void;
-  onAdd: (expense: {
-    name: string;
-    amount: number;
-    categoryId: string;
-    subCategoryId?: string;
-    date: Date;
-    color: GradientColor;
-  }) => void;
+  expense: Expense | null;
+  onSave: (expense: Expense) => void;
 }
 
 const CATEGORY_TYPES: { id: CategoryType; name: string; emoji: string }[] = [
@@ -37,43 +32,67 @@ const CATEGORY_TYPES: { id: CategoryType; name: string; emoji: string }[] = [
   { id: 'savings', name: 'เงินออมและลงทุน', emoji: '💰' },
 ];
 
-export const AddExpenseModal = ({ open, onClose, onAdd }: AddExpenseModalProps) => {
+export const EditExpenseModal = ({ open, onClose, expense, onSave }: EditExpenseModalProps) => {
   const [name, setName] = useState('');
   const [amount, setAmount] = useState('');
   const [categoryType, setCategoryType] = useState<CategoryType>('needs');
   const [categoryId, setCategoryId] = useState('');
   const [subCategoryId, setSubCategoryId] = useState('');
   const [color, setColor] = useState<GradientColor>('pink');
+  const [customIcon, setCustomIcon] = useState<string | undefined>();
+
+  useEffect(() => {
+    if (expense) {
+      setName(expense.name);
+      setAmount(expense.amount.toString());
+      setCategoryId(expense.categoryId);
+      setSubCategoryId(expense.subCategoryId || '');
+      setColor(expense.color);
+      setCustomIcon(expense.customIcon);
+      const category = CATEGORIES.find(c => c.id === expense.categoryId);
+      if (category) {
+        setCategoryType(category.type);
+      }
+    }
+  }, [expense]);
 
   const filteredCategories = CATEGORIES.filter(c => c.type === categoryType);
   const selectedCategory = CATEGORIES.find(c => c.id === categoryId);
 
-  const handleSubmit = () => {
-    if (!name || !amount || !categoryId) return;
+  const handleIconUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setCustomIcon(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
-    onAdd({
+  const handleSubmit = () => {
+    if (!name || !amount || !categoryId || !expense) return;
+
+    onSave({
+      ...expense,
       name,
       amount: parseFloat(amount),
       categoryId,
       subCategoryId: subCategoryId || undefined,
-      date: new Date(),
       color,
+      customIcon,
     });
 
-    // Reset form
-    setName('');
-    setAmount('');
-    setCategoryId('');
-    setSubCategoryId('');
-    setColor('pink');
     onClose();
   };
+
+  if (!expense) return null;
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold">เพิ่มรายจ่าย</DialogTitle>
+          <DialogTitle className="text-xl font-semibold">แก้ไขรายจ่าย</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-5 py-4">
@@ -98,6 +117,36 @@ export const AddExpenseModal = ({ open, onClose, onAdd }: AddExpenseModalProps) 
                 onChange={(e) => setAmount(e.target.value)}
                 className="h-12 pl-8"
               />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-muted-foreground text-sm">ไอคอนกำหนดเอง</Label>
+            <div className="flex items-center gap-3">
+              {customIcon ? (
+                <img src={customIcon} alt="icon" className="w-12 h-12 rounded-xl object-cover" />
+              ) : (
+                <div className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center text-2xl">
+                  {selectedCategory?.icon || '📝'}
+                </div>
+              )}
+              <label className="cursor-pointer">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleIconUpload}
+                  className="hidden"
+                />
+                <div className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border hover:bg-muted transition-colors">
+                  <Upload className="h-4 w-4" />
+                  <span className="text-sm">อัพโหลดไอคอน</span>
+                </div>
+              </label>
+              {customIcon && (
+                <Button variant="ghost" size="sm" onClick={() => setCustomIcon(undefined)}>
+                  ลบ
+                </Button>
+              )}
             </div>
           </div>
 
