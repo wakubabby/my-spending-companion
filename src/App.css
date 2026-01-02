@@ -1,21 +1,27 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0; /* ปรับเป็น 0 เพื่อให้แถบสีชมพูด้านบนชิดขอบ */
   text-align: center;
+  background-color: #ffffff; /* พื้นหลังส่วนล่างเป็นสีขาวสะอาด */
+  min-height: 100vh;
 }
 
+/* ปรับแต่ง Logo ให้เข้ากับธีมใหม่ */
 .logo {
   height: 6em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+  /* เปลี่ยนเงา hover ให้เป็นสีชมพูอ่อนเข้ากับธีม */
+  filter: drop-shadow(0 0 2em #ffc0d9aa);
 }
+
 .logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  filter: drop-shadow(0 0 2em #ff937eaa);
 }
 
 @keyframes logo-spin {
@@ -33,10 +39,39 @@
   }
 }
 
+/* ปรับแต่ง Card ในหน้าหลัก */
 .card {
   padding: 2em;
+  background-color: #ffffff;
+  border-radius: 1.25rem;
+  /* ใส่เงาบางๆ ให้ดูละมุนแบบพาสเทล */
+  box-shadow: 0 4px 20px rgba(255, 228, 239, 0.5); 
+  margin: 1rem;
+}
+
+/* ปรับสีตัวอักษรให้อ่านง่ายบนพื้นหลังชมพู/ขาว */
+h1 {
+  color: #c75a85; /* สีชมพูเข้มเพื่อให้เด่นขึ้น */
+}
+
+button {
+  background-color: #ff5555; /* ใช้สีแดงจากพาเลทที่คุณเคยเลือก */
+  color: white;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
+button:hover {
+  background-color: #ff3b3b;
 }
 
 .read-the-docs {
-  color: #888;
+  /* ปรับสีเทาให้ออกไปทางโทนอุ่น (Warm Gray) จะเข้ากับสีชมพูได้ดีกว่า */
+  color: #a38b95; 
 }

@@ -2,119 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
 @layer base {
   :root {
-    --background: 240 20% 98%;
-    --foreground: 230 25% 18%;
-
+    --primary: 0 100% 67%;
+    --primary-foreground: 0 0% 100%;
+    --background: 210 20% 98%;
+    --foreground: 220 20% 15%;
     --card: 0 0% 100%;
-    --card-foreground: 230 25% 18%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 230 25% 18%;
-
-    --primary: 250 85% 60%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 340 75% 92%;
-    --secondary-foreground: 340 60% 40%;
-
-    --muted: 240 15% 95%;
-    --muted-foreground: 230 15% 50%;
-
-    --accent: 190 80% 90%;
-    --accent-foreground: 190 60% 30%;
-
-    --destructive: 0 75% 55%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 230 20% 90%;
-    --input: 230 20% 90%;
-    --ring: 250 85% 60%;
-
-    --radius: 1rem;
-
-    /* Custom pastel gradients */
-    --gradient-pink: linear-gradient(135deg, hsl(350 80% 92%) 0%, hsl(340 70% 88%) 100%);
-    --gradient-blue: linear-gradient(135deg, hsl(200 80% 92%) 0%, hsl(190 70% 85%) 100%);
-    --gradient-purple: linear-gradient(135deg, hsl(280 70% 92%) 0%, hsl(260 60% 88%) 100%);
-    --gradient-green: linear-gradient(135deg, hsl(150 60% 90%) 0%, hsl(160 50% 85%) 100%);
-    --gradient-yellow: linear-gradient(135deg, hsl(50 80% 90%) 0%, hsl(45 70% 85%) 100%);
-    --gradient-orange: linear-gradient(135deg, hsl(30 80% 90%) 0%, hsl(25 70% 85%) 100%);
-    --gradient-mint: linear-gradient(135deg, hsl(170 60% 90%) 0%, hsl(165 50% 85%) 100%);
-    --gradient-lavender: linear-gradient(135deg, hsl(250 50% 92%) 0%, hsl(245 45% 88%) 100%);
-
-    /* Category colors */
-    --needs: 340 75% 65%;
-    --lifestyle: 250 70% 65%;
-    --savings: 160 60% 50%;
-    --debt: 0 70% 60%;
-
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 250 85% 60%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 250 85% 60%;
-  }
-
-  .dark {
-    --background: 230 25% 10%;
-    --foreground: 210 40% 98%;
-
-    --card: 230 25% 14%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 230 25% 14%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 250 80% 65%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 340 40% 25%;
-    --secondary-foreground: 340 60% 80%;
-
-    --muted: 230 20% 20%;
-    --muted-foreground: 215 20% 65%;
-
-    --accent: 190 50% 25%;
-    --accent-foreground: 190 60% 80%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 230 20% 20%;
-    --input: 230 20% 20%;
-    --ring: 250 80% 65%;
-
-    --gradient-pink: linear-gradient(135deg, hsl(350 50% 25%) 0%, hsl(340 45% 20%) 100%);
-    --gradient-blue: linear-gradient(135deg, hsl(200 50% 25%) 0%, hsl(190 45% 20%) 100%);
-    --gradient-purple: linear-gradient(135deg, hsl(280 45% 25%) 0%, hsl(260 40% 20%) 100%);
-    --gradient-green: linear-gradient(135deg, hsl(150 40% 22%) 0%, hsl(160 35% 18%) 100%);
-    --gradient-yellow: linear-gradient(135deg, hsl(50 50% 22%) 0%, hsl(45 45% 18%) 100%);
-    --gradient-orange: linear-gradient(135deg, hsl(30 50% 22%) 0%, hsl(25 45% 18%) 100%);
-    --gradient-mint: linear-gradient(135deg, hsl(170 40% 22%) 0%, hsl(165 35% 18%) 100%);
-    --gradient-lavender: linear-gradient(135deg, hsl(250 35% 25%) 0%, hsl(245 30% 20%) 100%);
-
-    --needs: 340 60% 55%;
-    --lifestyle: 250 55% 55%;
-    --savings: 160 45% 45%;
-    --debt: 0 55% 50%;
-
-    --sidebar-background: 230 25% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 250 80% 65%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 230 20% 18%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 230 20% 18%;
-    --sidebar-ring: 250 80% 65%;
+    --border: 220 15% 92%;
+    --radius: 1.25rem;
+    --muted: 210 15% 95%;
+    --muted-foreground: 215 15% 45%;
   }
 }
 
@@ -122,8 +20,36 @@ All colors MUST be HSL.
   * {
     @apply border-border;
   }
-
   body {
-    @apply bg-background text-foreground;
+    /* ใช้ฟอนต์ที่คุณต้องการทั้งเว็บ */
+    font-family: 'Prompt', 'Noto Sans Thai', sans-serif !important;
+    @apply bg-background text-foreground antialiased;
   }
+}
+
+/* แก้ไขปัญหา Select Content แสดงผลผิดที่หรือโดนทับใน Dialog */
+[data-radix-popper-content-wrapper] {
+  z-index: 200 !important;
+}
+
+/* ปรับแต่งความสวยงามของ Dropdown */
+[role="option"] {
+  @apply transition-colors duration-200 cursor-pointer !important;
+}
+
+/* ทำให้ Scrollbar ดูสะอาดตา */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-muted-foreground/20 rounded-full;
+}
+
+header::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 40%;
+  background: linear-gradient(to top, rgba(0,0,0,0.1), transparent);
+  pointer-events: none;
 }
